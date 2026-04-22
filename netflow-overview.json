@@ -1,0 +1,395 @@
+{
+  "__inputs": [
+    {
+      "name": "DS_ELASTICSEARCH",
+      "label": "Elasticsearch",
+      "description": "Your Elasticsearch datasource",
+      "type": "datasource",
+      "pluginId": "elasticsearch",
+      "pluginName": "Elasticsearch"
+    }
+  ],
+  "__requires": [
+    { "type": "grafana", "id": "grafana", "name": "Grafana", "version": "12.0.0" },
+    { "type": "datasource", "id": "elasticsearch", "name": "Elasticsearch", "version": "1.0.0" },
+    { "type": "panel", "id": "stat", "name": "Stat", "version": "" },
+    { "type": "panel", "id": "timeseries", "name": "Time series", "version": "" },
+    { "type": "panel", "id": "barchart", "name": "Bar chart", "version": "" },
+    { "type": "panel", "id": "piechart", "name": "Pie chart", "version": "" },
+    { "type": "panel", "id": "table", "name": "Table", "version": "" }
+  ],
+  "annotations": { "list": [] },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 1,
+  "id": null,
+  "links": [],
+  "panels": [
+    {
+      "id": 1,
+      "type": "stat",
+      "title": "Total Flows",
+      "gridPos": { "h": 4, "w": 6, "x": 0, "y": 0 },
+      "datasource": { "type": "elasticsearch", "uid": "${DS_ELASTICSEARCH}" },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "fixedColor": "#00d4ff", "mode": "fixed" },
+          "unit": "short",
+          "mappings": [],
+          "thresholds": { "mode": "absolute", "steps": [{ "color": "#00d4ff", "value": null }] }
+        },
+        "overrides": []
+      },
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "textMode": "value_and_name",
+        "reduceOptions": { "calcs": ["count"], "fields": "", "values": false }
+      },
+      "targets": [
+        {
+          "datasource": { "type": "elasticsearch", "uid": "${DS_ELASTICSEARCH}" },
+          "query": "",
+          "refId": "A",
+          "metrics": [{ "id": "1", "type": "count" }],
+          "bucketAggs": [],
+          "index": "netflow-*",
+          "timeField": "@timestamp"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "type": "stat",
+      "title": "Bytes In",
+      "gridPos": { "h": 4, "w": 6, "x": 6, "y": 0 },
+      "datasource": { "type": "elasticsearch", "uid": "${DS_ELASTICSEARCH}" },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "fixedColor": "#00ff9d", "mode": "fixed" },
+          "unit": "bytes",
+          "mappings": [],
+          "thresholds": { "mode": "absolute", "steps": [{ "color": "#00ff9d", "value": null }] }
+        },
+        "overrides": []
+      },
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "textMode": "value_and_name",
+        "reduceOptions": { "calcs": ["sum"], "fields": "/^network\\.bytes$/", "values": false }
+      },
+      "targets": [
+        {
+          "datasource": { "type": "elasticsearch", "uid": "${DS_ELASTICSEARCH}" },
+          "query": "network.direction:ingress",
+          "refId": "A",
+          "metrics": [{ "id": "1", "type": "sum", "field": "network.bytes" }],
+          "bucketAggs": [],
+          "index": "netflow-*",
+          "timeField": "@timestamp"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "type": "stat",
+      "title": "Bytes Out",
+      "gridPos": { "h": 4, "w": 6, "x": 12, "y": 0 },
+      "datasource": { "type": "elasticsearch", "uid": "${DS_ELASTICSEARCH}" },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "fixedColor": "#ff7c3d", "mode": "fixed" },
+          "unit": "bytes",
+          "mappings": [],
+          "thresholds": { "mode": "absolute", "steps": [{ "color": "#ff7c3d", "value": null }] }
+        },
+        "overrides": []
+      },
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "textMode": "value_and_name",
+        "reduceOptions": { "calcs": ["sum"], "fields": "/^network\\.bytes$/", "values": false }
+      },
+      "targets": [
+        {
+          "datasource": { "type": "elasticsearch", "uid": "${DS_ELASTICSEARCH}" },
+          "query": "network.direction:egress",
+          "refId": "A",
+          "metrics": [{ "id": "1", "type": "sum", "field": "network.bytes" }],
+          "bucketAggs": [],
+          "index": "netflow-*",
+          "timeField": "@timestamp"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "type": "stat",
+      "title": "Unique Source IPs",
+      "gridPos": { "h": 4, "w": 6, "x": 18, "y": 0 },
+      "datasource": { "type": "elasticsearch", "uid": "${DS_ELASTICSEARCH}" },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "fixedColor": "#7c5cfc", "mode": "fixed" },
+          "unit": "short",
+          "mappings": [],
+          "thresholds": { "mode": "absolute", "steps": [{ "color": "#7c5cfc", "value": null }] }
+        },
+        "overrides": []
+      },
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "textMode": "value_and_name",
+        "reduceOptions": { "calcs": ["sum"], "fields": "", "values": false }
+      },
+      "targets": [
+        {
+          "datasource": { "type": "elasticsearch", "uid": "${DS_ELASTICSEARCH}" },
+          "query": "",
+          "refId": "A",
+          "metrics": [{ "id": "1", "type": "cardinality", "field": "source.ip" }],
+          "bucketAggs": [],
+          "index": "netflow-*",
+          "timeField": "@timestamp"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "type": "timeseries",
+      "title": "Network Traffic Over Time",
+      "gridPos": { "h": 8, "w": 16, "x": 0, "y": 4 },
+      "datasource": { "type": "elasticsearch", "uid": "${DS_ELASTICSEARCH}" },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "palette-classic" },
+          "unit": "bytes",
+          "custom": {
+            "lineWidth": 2,
+            "fillOpacity": 15,
+            "gradientMode": "opacity",
+            "lineInterpolation": "smooth",
+            "showPoints": "auto",
+            "spanNulls": false
+          }
+        },
+        "overrides": [
+          {
+            "matcher": { "id": "byName", "options": "ingress" },
+            "properties": [{ "id": "color", "value": { "fixedColor": "#00d4ff", "mode": "fixed" } }]
+          },
+          {
+            "matcher": { "id": "byName", "options": "egress" },
+            "properties": [{ "id": "color", "value": { "fixedColor": "#7c5cfc", "mode": "fixed" } }]
+          }
+        ]
+      },
+      "options": {
+        "tooltip": { "mode": "all", "sort": "none" },
+        "legend": { "displayMode": "list", "placement": "bottom" }
+      },
+      "targets": [
+        {
+          "datasource": { "type": "elasticsearch", "uid": "${DS_ELASTICSEARCH}" },
+          "query": "",
+          "refId": "A",
+          "metrics": [{ "id": "1", "type": "sum", "field": "network.bytes" }],
+          "bucketAggs": [
+            { "id": "2", "type": "terms", "field": "network.direction", "settings": { "size": "10", "order": "desc", "orderBy": "1" } },
+            { "id": "3", "type": "date_histogram", "field": "@timestamp", "settings": { "interval": "auto", "min_doc_count": "0" } }
+          ],
+          "index": "netflow-*",
+          "timeField": "@timestamp"
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "type": "piechart",
+      "title": "Protocol Distribution",
+      "gridPos": { "h": 8, "w": 8, "x": 16, "y": 4 },
+      "datasource": { "type": "elasticsearch", "uid": "${DS_ELASTICSEARCH}" },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "palette-classic" },
+          "unit": "short"
+        },
+        "overrides": [
+          { "matcher": { "id": "byName", "options": "tcp" }, "properties": [{ "id": "color", "value": { "fixedColor": "#00d4ff", "mode": "fixed" } }] },
+          { "matcher": { "id": "byName", "options": "udp" }, "properties": [{ "id": "color", "value": { "fixedColor": "#7c5cfc", "mode": "fixed" } }] },
+          { "matcher": { "id": "byName", "options": "icmp" }, "properties": [{ "id": "color", "value": { "fixedColor": "#00ff9d", "mode": "fixed" } }] }
+        ]
+      },
+      "options": {
+        "pieType": "pie",
+        "displayLabels": ["name", "percent"],
+        "tooltip": { "mode": "all" },
+        "legend": { "displayMode": "list", "placement": "right" }
+      },
+      "targets": [
+        {
+          "datasource": { "type": "elasticsearch", "uid": "${DS_ELASTICSEARCH}" },
+          "query": "",
+          "refId": "A",
+          "metrics": [{ "id": "1", "type": "count" }],
+          "bucketAggs": [
+            { "id": "2", "type": "terms", "field": "network.transport", "settings": { "size": "10", "order": "desc", "orderBy": "1" } }
+          ],
+          "index": "netflow-*",
+          "timeField": "@timestamp"
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "type": "barchart",
+      "title": "Top Source IPs by Bytes",
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 12 },
+      "datasource": { "type": "elasticsearch", "uid": "${DS_ELASTICSEARCH}" },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "fixedColor": "#00d4ff", "mode": "fixed" },
+          "unit": "bytes",
+          "custom": { "fillOpacity": 80, "lineWidth": 0 }
+        },
+        "overrides": []
+      },
+      "options": {
+        "orientation": "horizontal",
+        "tooltip": { "mode": "single" },
+        "legend": { "displayMode": "hidden" },
+        "xTickLabelRotation": 0
+      },
+      "targets": [
+        {
+          "datasource": { "type": "elasticsearch", "uid": "${DS_ELASTICSEARCH}" },
+          "query": "",
+          "refId": "A",
+          "metrics": [{ "id": "1", "type": "sum", "field": "network.bytes" }],
+          "bucketAggs": [
+            { "id": "2", "type": "terms", "field": "source.ip", "settings": { "size": "10", "order": "desc", "orderBy": "1" } }
+          ],
+          "index": "netflow-*",
+          "timeField": "@timestamp"
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "type": "barchart",
+      "title": "Top Destination IPs by Bytes",
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 12 },
+      "datasource": { "type": "elasticsearch", "uid": "${DS_ELASTICSEARCH}" },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "fixedColor": "#7c5cfc", "mode": "fixed" },
+          "unit": "bytes",
+          "custom": { "fillOpacity": 80, "lineWidth": 0 }
+        },
+        "overrides": []
+      },
+      "options": {
+        "orientation": "horizontal",
+        "tooltip": { "mode": "single" },
+        "legend": { "displayMode": "hidden" }
+      },
+      "targets": [
+        {
+          "datasource": { "type": "elasticsearch", "uid": "${DS_ELASTICSEARCH}" },
+          "query": "",
+          "refId": "A",
+          "metrics": [{ "id": "1", "type": "sum", "field": "network.bytes" }],
+          "bucketAggs": [
+            { "id": "2", "type": "terms", "field": "destination.ip", "settings": { "size": "10", "order": "desc", "orderBy": "1" } }
+          ],
+          "index": "netflow-*",
+          "timeField": "@timestamp"
+        }
+      ]
+    },
+    {
+      "id": 9,
+      "type": "barchart",
+      "title": "Top Destination Ports",
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 20 },
+      "datasource": { "type": "elasticsearch", "uid": "${DS_ELASTICSEARCH}" },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "fixedColor": "#00ff9d", "mode": "fixed" },
+          "unit": "short",
+          "custom": { "fillOpacity": 80, "lineWidth": 0 }
+        },
+        "overrides": []
+      },
+      "options": {
+        "orientation": "horizontal",
+        "tooltip": { "mode": "single" },
+        "legend": { "displayMode": "hidden" }
+      },
+      "targets": [
+        {
+          "datasource": { "type": "elasticsearch", "uid": "${DS_ELASTICSEARCH}" },
+          "query": "",
+          "refId": "A",
+          "metrics": [{ "id": "1", "type": "count" }],
+          "bucketAggs": [
+            { "id": "2", "type": "terms", "field": "destination.port", "settings": { "size": "10", "order": "desc", "orderBy": "1" } }
+          ],
+          "index": "netflow-*",
+          "timeField": "@timestamp"
+        }
+      ]
+    },
+    {
+      "id": 10,
+      "type": "table",
+      "title": "Recent Flow Events",
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 20 },
+      "datasource": { "type": "elasticsearch", "uid": "${DS_ELASTICSEARCH}" },
+      "fieldConfig": {
+        "defaults": { "unit": "short", "custom": { "cellOptions": { "type": "auto" } } },
+        "overrides": [
+          { "matcher": { "id": "byName", "options": "network.bytes" }, "properties": [{ "id": "unit", "value": "bytes" }, { "id": "custom.cellOptions", "value": { "type": "color-background", "mode": "gradient" } }, { "id": "color", "value": { "fixedColor": "#00d4ff", "mode": "fixed" } }] },
+          { "matcher": { "id": "byName", "options": "event.duration" }, "properties": [{ "id": "unit", "value": "ns" }, { "id": "custom.cellOptions", "value": { "type": "color-text" } }, { "id": "color", "value": { "fixedColor": "#ff7c3d", "mode": "fixed" } }] }
+        ]
+      },
+      "options": {
+        "showHeader": true,
+        "cellHeight": "sm",
+        "footer": { "show": false }
+      },
+      "targets": [
+        {
+          "datasource": { "type": "elasticsearch", "uid": "${DS_ELASTICSEARCH}" },
+          "query": "",
+          "refId": "A",
+          "metrics": [{ "id": "1", "type": "logs" }],
+          "bucketAggs": [],
+          "index": "netflow-*",
+          "timeField": "@timestamp"
+        }
+      ]
+    }
+  ],
+  "refresh": "30s",
+  "schemaVersion": 39,
+  "tags": ["netflow", "filebeat", "network"],
+  "templating": { "list": [] },
+  "time": { "from": "now-6h", "to": "now" },
+  "timepicker": {},
+  "timezone": "browser",
+  "title": "[Filebeat Netflow] Overview",
+  "uid": "netflow-overview",
+  "version": 1
+}
